@@ -170,7 +170,25 @@ private Stack getWhitePawnSquares(int x, int y, String piece){
         } 
 
         }
-      }  return moves;
+      }
+      Square tmp2 = new Square(x, tmpy2, piece);
+      if(!(tmpy2 < 0)){
+        if(checkSurroundingSquares(tmp2)){
+          validM2 = new Move(startingSquare, tmp2);
+          if(!piecePresent(((tmp2.getXC()*75)+20), (((tmp2.getYC()*75)+20)))){
+            moves.push(validM2);
+          }
+          else{
+            System.out.println("The values that we are going to be looking at are : "+((tmp2.getXC()*75)+20)+" and the y value is : "+((tmp2.getYC()*75)+20));
+            if(checkWhiteOponent(((tmp2.getXC()*75)+20), (((tmp2.getYC()*75)+20)))){
+              moves.push(validM2);
+            }
+          }
+        }
+      }
+
+
+      return moves;
     }
 
 
