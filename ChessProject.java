@@ -137,8 +137,21 @@ public class ChessProject extends JFrame implements MouseListener, MouseMotionLi
       temporary = new Stack();
     }
 
-
-
+   /* private Stack getWhiteAttackSquares(Stack pieces){
+      while(!pieces.empty()){
+        Square s = (Square) pieces.pop();
+        String tmpString = s.getName();
+        if(tmpString.contains("Knight")){
+          Square tempK = getKnightMoves(s.getXC(), s.getYC, s.getName());
+          while(!tempK.empty()){
+            Square tempKnight = (Square)tempK.pop();
+          }
+        }
+        else if(tmpString.contains("Bishop")){
+          
+        }
+      }
+    }*/ 
 
 
 
@@ -147,18 +160,19 @@ public class ChessProject extends JFrame implements MouseListener, MouseMotionLi
   its starting position in which case it can move either one or two squares or it has already moved and the it can only
   one square down the board. The Pawn can also take an opponent piece in a diagonal movement. and if it makes it to the
   bottom of the board it turns into a Queen (this should be handled where the move is actually being made and not in this
-  method). 
+  method).
 */
 
 //
 private Stack getWhitePawnSquares(int x, int y, String piece){
 
     Square startingSquare = new Square(x, y, piece); 
-    Stack moves = new Stack();
-    Move validM, validM2;
-    int tmpy1 = y+1;
+    Stack moves = new Stack(); 
+    boolean validMove; 
+    Move validM, validM2, validM3;
+    int tmpy1 = y+1; 
     int tmpy2 = y+2; 
-    //int diagonal = x
+ 
  
     if(!((tmpy1 > 7))){
       Square tmp = new Square(x, tmpy1, piece); 
@@ -170,22 +184,63 @@ private Stack getWhitePawnSquares(int x, int y, String piece){
         } 
 
         }
-      }
-      Square tmp2 = new Square(x, tmpy2, piece);
+      } 
+     
+      Square tmp2 = new Square(x, tmpy2, piece); 
       if(!(tmpy2 < 0)){
         if(checkSurroundingSquares(tmp2)){
           validM2 = new Move(startingSquare, tmp2);
           if(!piecePresent(((tmp2.getXC()*75)+20), (((tmp2.getYC()*75)+20)))){
             moves.push(validM2);
-          }
-          else{
-            System.out.println("The values that we are going to be looking at are : "+((tmp2.getXC()*75)+20)+" and the y value is : "+((tmp2.getYC()*75)+20));
+          } 
+         
+          
+
+        /*  else{
+           /* System.out.println("The values that we are going to be looking at are : "+((tmp2.getXC()*75)+20)+" and the y value is : "+((tmp2.getYC()*75)+20));
             if(checkWhiteOponent(((tmp2.getXC()*75)+20), (((tmp2.getYC()*75)+20)))){
-              moves.push(validM2);
+              moves.push(validM2);*/
+            
+          //}
+
+/*   else{
+            if(checkWhiteOponent(((tmp.getXC()*75)+20), ((tmp.getYC()*75)+20))){
+              moves.push(validM);
+              break;
+            }
+            else{
+              break;
+            }
+          }*/
+
+
+
+
+        }
+       }
+
+
+      for(int k=1;k < 2;k++){
+        
+        int tmpy3 = y+k;
+        if(!(tmpy3 > 7 || tmpy3 < 0)){
+          Square tmp3 = new Square(x, tmpy3, piece);
+          validM3 = new Move(startingSquare, tmp3);
+          if(!piecePresent(((tmp3.getXC()*75)+20), (((tmp3.getYC()*75)+20)))){
+            moves.push(validM3);
+          }
+         
+            else{
+              break;
             }
           }
         }
-      }
+      
+
+
+
+
+
 
 
       return moves;
@@ -493,7 +548,7 @@ private Stack getRookMoves(int x, int y, String piece){
     On each iteration of the first loop we are adding the value of i to the current x coordinate.
     We make sure that the new potential square is going to be on the board and if it is we create a new square and a new potential
     move (originating square, new square).If there are no pieces present on the potential square we simply add it to the Stack
-    of potential moves.
+    of potential moves. 
     If there is a piece on the square we need to check if its an opponent piece. If it is an opponent piece its a valid move, but we
     must break out of the loop using the Java break keyword as we can't jump over the piece and search for squares. If its not
     an opponent piece we simply break out of the loop.
@@ -634,7 +689,7 @@ private Stack getBishopMoves(int x, int y, String piece){
 
     This process is repeated for each of the other three possible diagonals that the Bishop can travel along.
 
-  */
+  */ 
   for(int i=1;i < 8;i++){
     int tmpx = x+i;
     int tmpy = y+i;
@@ -704,7 +759,7 @@ private Stack getBishopMoves(int x, int y, String piece){
       if(!piecePresent(((tmpNmov2.getXC()*75)+20), (((tmpNmov2.getYC()*75)+20)))){
         moves.push(validM4);
       }
-      else{
+      else{ 
         if(checkWhiteOponent(((tmpNmov2.getXC()*75)+20), ((tmpNmov2.getYC()*75)+20))){
           moves.push(validM4);
           break;
@@ -725,7 +780,7 @@ private Stack getBishopMoves(int x, int y, String piece){
     board as long as the landing square is on the board and we can take an opponents piece but not our own piece.
 */
 private Stack getKnightMoves(int x, int y, String piece){
-  Square startingSquare = new Square(x, y, piece);
+  Square startingSquare = new Square(x, y, piece); 
   Stack moves = new Stack();
   Stack attackingMove = new Stack();
   Square s = new Square(x+1, y+2, piece);
@@ -822,6 +877,8 @@ private void getLandingSquares(Stack found){
     }
     return squares;
   }
+
+
 
 	/*
 		This method checks if there is a piece present on a particular square.
@@ -1064,7 +1121,7 @@ private void printStack(Stack input){
         Point parentLocation = c.getParent().getLocation();
         xAdjustment = parentLocation.x - e.getX();
         yAdjustment = parentLocation.y - e.getY();
-        chessPiece = (JLabel)c;
+        chessPiece = (JLabel)c; 
 		    initialX = e.getX();
 		    initialY = e.getY();
 		    startX = (e.getX()/75);
@@ -1089,7 +1146,7 @@ private void printStack(Stack input){
 		This method is used when the Mouse is released...we need to make sure the move was valid before
 		putting the piece back on the board.
 	*/
-    public void mouseReleased(MouseEvent e) {
+    public void mouseReleased(MouseEvent e) { 
         if(chessPiece == null) return;
 
         chessPiece.setVisible(false);
