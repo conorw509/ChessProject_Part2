@@ -8,7 +8,7 @@ import javax.swing.border.Border;
 import javax.swing.border.TitledBorder;
 import javax.swing.border.EtchedBorder;
 import javax.swing.ImageIcon;
-import javax.swing.JTabbedPane;
+import javax.swing.JTabbedPane; 
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JFrame;
@@ -70,12 +70,12 @@ public class ChessProject extends JFrame implements MouseListener, MouseMotionLi
         }
 
         // Setting up the Initial Chess board.
-/*
-  	for(int i=8;i < 16; i++){
-       		pieces = new JLabel( new ImageIcon("WhitePawn.png") );
-			panels = (JPanel)chessBoard.getComponent(i);
-	        panels.add(pieces);
-		}*/
+        for (int i = 8; i < 16; i++) {
+          pieces = new JLabel(new ImageIcon("WhitePawn.png"));
+          panels = (JPanel) chessBoard.getComponent(i);
+          panels.add(pieces);
+        }  //white pawn 
+
 		pieces = new JLabel( new ImageIcon("WhiteRook.png") );
 		panels = (JPanel)chessBoard.getComponent(0);
 	    panels.add(pieces);
@@ -99,7 +99,8 @@ public class ChessProject extends JFrame implements MouseListener, MouseMotionLi
 	    panels.add(pieces);
 		pieces = new JLabel( new ImageIcon("WhiteRook.png") );
 		panels = (JPanel)chessBoard.getComponent(7);
-	    panels.add(pieces);
+      panels.add(pieces);
+      
 		for(int i=48;i < 56; i++){
        		pieces = new JLabel( new ImageIcon("BlackPawn.png") );
 			panels = (JPanel)chessBoard.getComponent(i);
@@ -136,20 +137,49 @@ public class ChessProject extends JFrame implements MouseListener, MouseMotionLi
       temporary = new Stack();
     }
 
+
+
+
+
+
 /*
   Method to check were a Black Pawn can move to. There are two main conditions here. Either the Black Pawn is in
   its starting position in which case it can move either one or two squares or it has already moved and the it can only
   one square down the board. The Pawn can also take an opponent piece in a diagonal movement. and if it makes it to the
   bottom of the board it turns into a Queen (this should be handled where the move is actually being made and not in this
-  method).
+  method). 
 */
+
+//
 private Stack getWhitePawnSquares(int x, int y, String piece){
-  Stack moves = new Stack();
 
-// To be completed...
+    Square startingSquare = new Square(x, y, piece); 
+    Stack moves = new Stack();
+    Move validM, validM2;
+    int tmpy1 = y+1;
+    int tmpy2 = y+2; 
+    //int diagonal = x
+ 
+    if(!((tmpy1 > 7))){
+      Square tmp = new Square(x, tmpy1, piece); 
+     
+      if(checkSurroundingSquares(tmp)){ 
+        validM = new Move(startingSquare, tmp); 
+        if(!piecePresent(((tmp.getXC()*75)+20), (((tmp.getYC()*75)+20)))){
+          moves.push(validM); 
+        } 
 
-  return moves;
-}
+        }
+      }  return moves;
+    }
+
+
+
+
+
+ 
+
+
 
 
 
@@ -208,13 +238,14 @@ private Boolean checkSurroundingSquares(Square s){
                                         |           |         |           |
 
 
-  This shows us that for a single square with coordinates of (x, y) we need to check eight other potential squares.
+  This shows us that for a single square with coordinates of (x, y) we need to check eight other potential squares. 
   Remember we only need to check squares and contsruct moves if the movement (Piece on a Square --> a new Square) is
   going to be placing the piece back on the board, if we are not taking our own piece and if the resulting landing square
-  is not adjacent to the enemy King.
+  is not adjacent to the enemy King. 
+
 */
 private Stack getKingSquares(int x, int y, String piece){
-  Square startingSquare = new Square(x, y, piece);
+  Square startingSquare = new Square(x, y, piece); 
   Stack moves = new Stack();
   Move validM, validM2, validM3, validM4;
   int tmpx1 = x+1;
@@ -227,7 +258,7 @@ private Stack getKingSquares(int x, int y, String piece){
     - if x increases by one square, using the variable tmpx1 (x+1)
     - if x decreases by one square, using the variable tmpx2 (x-1)
     - or if x stays the same.
-*/
+*/ 
   if(!((tmpx1 > 7))){
     /*
       This is the first condition where we will be working with the column where x increases.
@@ -236,34 +267,34 @@ private Stack getKingSquares(int x, int y, String piece){
 
       From the grid above we can see in this column that there are three possible squares for us to check in
       this column:
-      - were y decreases, y-1
+      - were y decreases, y-1 
       - were y increases, y+1
       - or were y stays the same
 
       The first step is to construct three new Squares for each of these possibilities.
       As the unchanged y value is already a location on the board we don't need to check the location and can simply
-      make a call to checkSurroundingSquares for this new Square.
+      make a call to checkSurroundingSquares for this new Square. 
 
       If checkSurroundingSquares returns a positive value we jump inside the condition below:
         - firstly we create a new Move, which takes the starting square and the landing square that we have just checked with
-          checkSurroundingSquares.
+          checkSurroundingSquares.  
         - Next we need to figure out if there is a piece present on the square and if so make sure
-          that the piece is an opponents piece.
+          that the piece is an opponents piece. 
         - Once we make sure that we are either moving to an empty square or we are taking our opponents piece we can push this
-          possible move onto our stack of possible moves called "moves".
+          possible move onto our stack of possible moves called "moves".    
 
       This process is followed again for the other temporary squares created.
 
       After we check for all possoble squares on this column, we repeat the process for the other columns as identified above
-      in the grid.
-    */
-    Square tmp = new Square(tmpx1, y, piece);
+      in the grid.  
+    */ 
+    Square tmp = new Square(tmpx1, y, piece); 
     Square tmp1 = new Square(tmpx1, tmpy1, piece);
     Square tmp2 = new Square(tmpx1, tmpy2, piece);
-    if(checkSurroundingSquares(tmp)){
-      validM = new Move(startingSquare, tmp);
+    if(checkSurroundingSquares(tmp)){ 
+      validM = new Move(startingSquare, tmp); 
       if(!piecePresent(((tmp.getXC()*75)+20), (((tmp.getYC()*75)+20)))){
-        moves.push(validM);
+        moves.push(validM); 
       }
       else{
         if(checkWhiteOponent(((tmp.getXC()*75)+20), (((tmp.getYC()*75)+20)))){
@@ -271,7 +302,7 @@ private Stack getKingSquares(int x, int y, String piece){
         }
       }
     }
-    if(!(tmpy1 > 7)){
+    if(!(tmpy1 > 7)){ //for the next move 
       if(checkSurroundingSquares(tmp1)){
         validM2 = new Move(startingSquare, tmp1);
         if(!piecePresent(((tmp1.getXC()*75)+20), (((tmp1.getYC()*75)+20)))){
@@ -344,7 +375,7 @@ private Stack getKingSquares(int x, int y, String piece){
   Square tmp7 = new Square(x, tmpy1, piece);
   Square tmp8 = new Square(x, tmpy2, piece);
   if(!(tmpy1 > 7)){
-    if(checkSurroundingSquares(tmp7)){
+    if(checkSurroundingSquares(tmp7)){ 
       validM2 = new Move(startingSquare, tmp7);
       if(!piecePresent(((tmp7.getXC()*75)+20), (((tmp7.getYC()*75)+20)))){
         moves.push(validM2);
@@ -727,7 +758,7 @@ private void colorSquares(Stack squares){
     int location = s.getXC() + ((s.getYC())*8);
     JPanel panel = (JPanel)chessBoard.getComponent(location);
     panel.setBorder(greenBorder);
-  }
+  } 
 }
 
 /*
@@ -763,7 +794,7 @@ private void getLandingSquares(Stack found){
         if(tmp instanceof JLabel){
           chessPiece = (JLabel)tmp;
           icon = chessPiece.getIcon().toString();
-          pieceName = icon.substring(0, (icon.length()-4));
+          pieceName = icon.substring(0, (icon.length()-4)); 
           if(pieceName.contains("White")){
             Square stmp = new Square(x, y, pieceName);
             squares.push(stmp);
@@ -845,19 +876,22 @@ private void printStack(Stack input){
       /*
           We need to identify all the possible moves that can be made by the AI Opponent
       */
+      if(tmpString.contains("Pawn")){
+        tmpMoves = getWhitePawnSquares(s.getXC(), s.getYC(), s.getName());
+      }
       if(tmpString.contains("Knight")){
-    //    tmpMoves = getKnightMoves(s.getXC(), s.getYC(), s.getName());
+        tmpMoves = getKnightMoves(s.getXC(), s.getYC(), s.getName());
       }
       else if(tmpString.contains("Bishop")){
-    //    tmpMoves = getBishopMoves(s.getXC(), s.getYC(), s.getName());
+        tmpMoves = getBishopMoves(s.getXC(), s.getYC(), s.getName());
       }
       else if(tmpString.contains("Pawn")){
       }
       else if(tmpString.contains("Rook")){
-      //  tmpMoves = getRookMoves(s.getXC(), s.getYC(), s.getName());
+        tmpMoves = getRookMoves(s.getXC(), s.getYC(), s.getName());
       }
       else if(tmpString.contains("Queen")){
-      //  tmpMoves = getQueenMoves(s.getXC(), s.getYC(), s.getName());
+        tmpMoves = getQueenMoves(s.getXC(), s.getYC(), s.getName());
       }
       else if(tmpString.contains("King")){
         tmpMoves = getKingSquares(s.getXC(), s.getYC(), s.getName());
@@ -874,7 +908,7 @@ private void printStack(Stack input){
 /*
   So now we should have a copy of all the possible moves to make in our Stack called completeMoves
 */
-  if(completeMoves.size() == 0){
+  if(completeMoves.size() == 0){ 
 /*
       In Chess if you cannot make a valid move but you are not in Check this state is referred to
       as a Stale Mate
@@ -1025,7 +1059,7 @@ private void printStack(Stack input){
 
         chessPiece.setLocation(e.getX() + xAdjustment, e.getY() + yAdjustment);
         chessPiece.setSize(chessPiece.getWidth(), chessPiece.getHeight());
-        layeredPane.add(chessPiece, JLayeredPane.DRAG_LAYER);
+        layeredPane.add(chessPiece, JLayeredPane.DRAG_LAYER); 
     }
 
     public void mouseDragged(MouseEvent me) {
@@ -1063,6 +1097,8 @@ private void printStack(Stack input){
         System.out.println("The landing coordinates are : "+"( "+landingX+","+landingY+")");
         System.out.println("----------------------------------------------");
 
+        
+
         /*
           We need a process to identify whos turn it is to make a move.
         */
@@ -1087,7 +1123,7 @@ private void printStack(Stack input){
             pieces it can take its opponent piece but cannot take its own piece.
           */
           Boolean inTheWay = false;
-          if(((landingX < 0) || (landingX > 7))||((landingY < 0)||(landingY > 7))){
+          if(((landingX< 0) || (landingX > 7))||((landingY < 0)||(landingY > 7))){
             validMove = false;
           }
           else if(!pieceMove(landingX, landingY)){
@@ -1689,11 +1725,19 @@ private void printStack(Stack input){
 					pieces = new JLabel( new ImageIcon("BlackQueen.png") );
 					parent = (JPanel)chessBoard.getComponent(location);
 			    parent.add(pieces);
-				}
+        }
         if(winner !=null){
           JOptionPane.showMessageDialog(null, winner);
           System.exit(0);
         }
+
+        else{
+					Container parent = (Container)c;
+          pieces = new JLabel( new ImageIcon("BlackQueen.png") );
+					parent = (JPanel)chessBoard.getComponent(location);
+          parent.add(pieces);
+				}
+
       }
 			else if(success){
 				int location = 56 + (e.getX()/75);
@@ -1735,6 +1779,7 @@ private void printStack(Stack input){
 
     }
     public void mouseMoved(MouseEvent e) {
+
    }
     public void mouseEntered(MouseEvent e){
 
@@ -1744,7 +1789,7 @@ private void printStack(Stack input){
     }
 
     public void startGame(){
-      System.out.println("Let the game begin");
+      System.out.println("Let the game begin");  
     }
 	/*
 		Main method that gets the ball moving.
